@@ -10,24 +10,24 @@
   "miniapp": {
     "version": "1",
     "name": "Lottery Mini App",
-    "homeUrl": "https://your-app.com",
-    "iconUrl": "https://your-app.com/icon.png",
-    "splashImageUrl": "https://your-app.com/splash.png",
+    "homeUrl": "https://lottery-miniapp.vercel.app/",
+    "iconUrl": "https://lottery-miniapp.vercel.app/icon.png",
+    "splashImageUrl": "https://lottery-miniapp.vercel.app/splash.png",
     "splashBackgroundColor": "#1a1a2e",
-    "webhookUrl": "https://your-app.com/api/webhook",
+    "webhookUrl": "https://lottery-miniapp.vercel.app/api/webhook",
     "subtitle": "Hourly lottery, instant wins",
     "description": "Join the hourly lottery! Buy tickets for $0.1 each, match 2 numbers, and win 90% of the prize pool. New round every hour!",
     "screenshotUrls": [
-      "https://your-app.com/screenshot1.png",
-      "https://your-app.com/screenshot2.png"
+      "https://lottery-miniapp.vercel.app/screenshot1.png",
+      "https://lottery-miniapp.vercel.app/screenshot2.png"
     ],
     "primaryCategory": "games",
     "tags": ["lottery", "gaming", "crypto", "base"],
-    "heroImageUrl": "https://your-app.com/hero.png",
+    "heroImageUrl": "https://lottery-miniapp.vercel.app/hero.png",
     "tagline": "Win big every hour",
     "ogTitle": "Lottery Mini App - Hourly Lottery on Base",
     "ogDescription": "Join the hourly lottery! Buy tickets for $0.1 each and win 90% of the prize pool.",
-    "ogImageUrl": "https://your-app.com/og-image.png",
+    "ogImageUrl": "https://lottery-miniapp.vercel.app/og-image.png",
     "noindex": false
   }
 }
