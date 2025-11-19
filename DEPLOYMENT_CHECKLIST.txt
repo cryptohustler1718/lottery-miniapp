@@ -1,0 +1,225 @@
+═══════════════════════════════════════════════════════════════
+🚀 DEPLOYMENT CHECKLIST - Track Your Progress
+═══════════════════════════════════════════════════════════════
+
+Use this checklist to track your deployment progress.
+Mark each item with [✓] when complete.
+
+═══════════════════════════════════════════════════════════════
+PHASE 1: PRE-DEPLOYMENT
+═══════════════════════════════════════════════════════════════
+
+[ ] Contract deployed on Base Sepolia
+[ ] Contract address updated in src/contracts/config.js
+[ ] Frontend tested locally (npm run dev works)
+[ ] Backend tested locally (cd backend && npm run dev works)
+[ ] GitHub account created
+[ ] Farcaster account created (Warpcast)
+[ ] .gitignore file includes .env and node_modules
+
+
+═══════════════════════════════════════════════════════════════
+PHASE 2: PUSH TO GITHUB
+═══════════════════════════════════════════════════════════════
+
+[ ] Created new GitHub repository
+[ ] Added .gitignore to exclude sensitive files
+[ ] Committed all code: git add . && git commit -m "Initial"
+[ ] Pushed to GitHub: git push -u origin main
+[ ] Verified repo is private (if needed)
+
+
+═══════════════════════════════════════════════════════════════
+PHASE 3: DEPLOY FRONTEND (VERCEL)
+═══════════════════════════════════════════════════════════════
+
+[ ] Signed up for Vercel (vercel.com)
+[ ] Connected GitHub account to Vercel
+[ ] Created new project from GitHub repo
+[ ] Set Framework Preset: Vite
+[ ] Set Build Command: npm run build
+[ ] Set Output Directory: dist
+[ ] Added environment variables:
+    [ ] VITE_LOTTERY_CONTRACT
+    [ ] VITE_USDC_ADDRESS
+    [ ] VITE_CHAIN_ID
+    [ ] VITE_RPC_URL
+[ ] Deployed successfully
+[ ] Got deployment URL: ________________
+[ ] Tested URL - app loads correctly
+[ ] Connected wallet works
+[ ] Can buy tickets
+
+
+═══════════════════════════════════════════════════════════════
+PHASE 4: UPDATE FARCASTER MANIFEST
+═══════════════════════════════════════════════════════════════
+
+[ ] Updated all URLs in public/.well-known/farcaster.json
+[ ] Changed homeUrl to Vercel URL
+[ ] Changed iconUrl to Vercel URL
+[ ] Changed all image URLs to Vercel URL
+[ ] Added wallet address to baseBuilder.ownerAddress
+[ ] Committed changes: git commit -m "Update manifest"
+[ ] Pushed: git push
+[ ] Verified auto-deployment on Vercel
+
+
+═══════════════════════════════════════════════════════════════
+PHASE 5: CREATE & UPLOAD IMAGES (OPTIONAL)
+═══════════════════════════════════════════════════════════════
+
+[ ] Created icon.png (512x512)
+[ ] Created splash.png (424x695)
+[ ] Created hero.png (1200x630)
+[ ] Created og-image.png (1200x630)
+[ ] Created screenshot1.png (424x695)
+[ ] Uploaded all to public/ folder
+[ ] Committed and pushed
+[ ] Verified images load on Vercel URL
+
+
+═══════════════════════════════════════════════════════════════
+PHASE 6: REGISTER ON FARCASTER
+═══════════════════════════════════════════════════════════════
+
+[ ] Went to warpcast.com/~/developers/miniapps
+[ ] Clicked "Create Mini App"
+[ ] Filled in app name
+[ ] Added Vercel URL
+[ ] Added manifest URL (.well-known/farcaster.json)
+[ ] Submitted for review
+[ ] Received confirmation email
+[ ] Waiting for approval (24-48h)
+[ ] APPROVED! Date: ________________
+
+
+═══════════════════════════════════════════════════════════════
+PHASE 7: DEPLOY BACKEND (RENDER)
+═══════════════════════════════════════════════════════════════
+
+[ ] Created new MetaMask wallet for backend
+[ ] Exported private key (SAVED SECURELY!)
+[ ] Sent 0.05 ETH to backend wallet
+[ ] Wallet address: ________________
+[ ] Signed up for Render.com
+[ ] Created new Web Service
+[ ] Connected GitHub repo
+[ ] Set Root Directory: backend
+[ ] Set Build Command: npm install
+[ ] Set Start Command: npm start
+[ ] Added environment variables:
+    [ ] RPC_URL
+    [ ] LOTTERY_CONTRACT_ADDRESS
+    [ ] PRIVATE_KEY
+    [ ] PORT
+[ ] Deployed successfully
+[ ] Got backend URL: ________________
+[ ] Tested /health endpoint - returns OK
+[ ] Checked logs - cron job running every minute
+
+
+═══════════════════════════════════════════════════════════════
+PHASE 8: TEST ON BASE SEPOLIA
+═══════════════════════════════════════════════════════════════
+
+[ ] Opened Vercel URL in browser
+[ ] Connected MetaMask wallet
+[ ] Got testnet USDC from faucet
+[ ] Bought 1 ticket successfully
+[ ] Waited for round to end (2 minutes)
+[ ] Backend auto-ended round (checked logs)
+[ ] New round started automatically
+[ ] Checked History tab - saw past round
+[ ] Tested claim button (if winner)
+[ ] All features work smoothly
+[ ] No errors in console
+
+
+═══════════════════════════════════════════════════════════════
+PHASE 9: TEST ON FARCASTER (AFTER APPROVAL)
+═══════════════════════════════════════════════════════════════
+
+[ ] App approved by Farcaster
+[ ] Opened Warpcast app
+[ ] Found app in Mini Apps section
+[ ] Opened app successfully
+[ ] Connected wallet
+[ ] Bought ticket
+[ ] Waited for round end
+[ ] Verified auto-round progression
+[ ] Everything works in Farcaster!
+
+
+═══════════════════════════════════════════════════════════════
+PHASE 10: MIGRATE TO BASE MAINNET (PRODUCTION)
+═══════════════════════════════════════════════════════════════
+
+⚠️  ONLY DO THIS AFTER THOROUGH TESTING!
+
+[ ] Got real ETH on Base mainnet
+[ ] Deployed contract to Base mainnet
+[ ] Contract address: ________________
+[ ] Verified contract on BaseScan
+[ ] Updated .env.production with mainnet values
+[ ] Updated src/contracts/config.js with mainnet values
+[ ] Updated backend env vars in Render
+[ ] Added 0.5 ETH to backend wallet
+[ ] Committed changes: git commit -m "Switch to mainnet"
+[ ] Pushed: git push
+[ ] Vercel auto-deployed
+[ ] Tested mainnet deployment
+[ ] Updated Farcaster manifest (if needed)
+[ ] Announced launch! 🎉
+
+
+═══════════════════════════════════════════════════════════════
+MONITORING CHECKLIST (ONGOING)
+═══════════════════════════════════════════════════════════════
+
+Daily:
+[ ] Check backend logs for errors
+[ ] Verify rounds ending automatically
+[ ] Check backend wallet balance
+
+Weekly:
+[ ] Review gas costs
+[ ] Top up backend wallet if needed
+[ ] Check for any user issues
+
+Monthly:
+[ ] Analyze usage metrics
+[ ] Optimize gas costs if needed
+[ ] Update any dependencies
+
+
+═══════════════════════════════════════════════════════════════
+📝 NOTES & LINKS
+═══════════════════════════════════════════════════════════════
+
+Frontend URL: _____________________
+Backend URL: _____________________
+Contract (Sepolia): _____________________
+Contract (Mainnet): _____________________
+Backend Wallet: _____________________
+
+Farcaster App Link: _____________________
+Approval Date: _____________________
+Launch Date: _____________________
+
+
+═══════════════════════════════════════════════════════════════
+🎉 COMPLETION
+═══════════════════════════════════════════════════════════════
+
+[ ] ALL PHASES COMPLETE!
+[ ] App live on Farcaster
+[ ] Backend running smoothly
+[ ] Users can play lottery
+[ ] Everything automatic
+[ ] No manual intervention needed
+
+CONGRATULATIONS! You've built and deployed a fully automatic,
+decentralized lottery mini app! 🚀
+
+═══════════════════════════════════════════════════════════════

@@ -1,0 +1,215 @@
+=================================================================
+🎰 LOTTERY BACKEND - AUTOMATIC ROUND ENDING SERVICE
+=================================================================
+
+This backend service automatically ends lottery rounds every minute,
+so users never see transaction popups!
+
+=================================================================
+📋 SETUP INSTRUCTIONS
+=================================================================
+
+1. INSTALL DEPENDENCIES
+   ------------------------
+   cd backend
+   npm install
+
+
+2. CREATE .env FILE
+   ------------------------
+   cp .env.example .env
+   
+   Then edit .env and add:
+   
+   - RPC_URL: Your Base network RPC (default: https://sepolia.base.org)
+   - LOTTERY_CONTRACT_ADDRESS: Your deployed contract address
+   - PRIVATE_KEY: A wallet's private key (needs ~$5 ETH for gas)
+   
+   ⚠️  IMPORTANT: This wallet ONLY needs ETH for gas fees!
+                  It does NOT need to be the owner wallet.
+                  Use a separate wallet for security.
+
+
+3. GET PRIVATE KEY
+   ------------------------
+   Option A: Create new wallet in MetaMask
+     - Create new account
+     - Export private key
+     - Send $5 worth of ETH to it
+   
+   Option B: Use existing wallet
+     - MetaMask → Account Details → Export Private Key
+     - ⚠️  NEVER share this key!
+
+
+4. RUN LOCALLY (TESTING)
+   ------------------------
+   npm run dev
+   
+   You should see:
+   ✅ Server running
+   ✅ Wallet balance displayed
+   ✅ Cron job scheduled
+   ✅ Initial round check
+
+
+5. TEST IT WORKS
+   ------------------------
+   Open: http://localhost:3001/health
+   
+   You should see JSON with:
+   - status: "ok"
+   - wallet address
+   - balance
+   - currentRound
+
+
+6. MANUAL TRIGGER (TESTING)
+   ------------------------
+   To test ending a round manually:
+   
+   curl -X POST http://localhost:3001/trigger-end-round
+   
+   This bypasses the cron schedule.
+
+
+=================================================================
+🚀 DEPLOYMENT (PRODUCTION)
+=================================================================
+
+OPTION 1: Render.com (FREE - RECOMMENDED)
+-------------------------------------------
+1. Create account at render.com
+2. New → Web Service
+3. Connect your GitHub repo
+4. Settings:
+   - Build Command: cd backend && npm install
+   - Start Command: cd backend && npm start
+   - Add environment variables from .env
+5. Deploy!
+
+Cost: FREE (with some limitations)
+
+
+OPTION 2: Railway.app (FREE TIER)
+-------------------------------------------
+1. Create account at railway.app
+2. New Project → Deploy from GitHub
+3. Select backend folder
+4. Add environment variables
+5. Deploy!
+
+Cost: $5/month free credit
+
+
+OPTION 3: Your Own Server
+-------------------------------------------
+1. SSH into your server
+2. Clone repo
+3. cd backend
+4. npm install
+5. Create .env file
+6. Install PM2: npm install -g pm2
+7. Start: pm2 start server.js
+8. Save: pm2 save
+9. Auto-restart: pm2 startup
+
+Cost: Depends on server
+
+
+=================================================================
+💰 COST BREAKDOWN
+=================================================================
+
+Backend Hosting:
+- Render/Railway: FREE
+- VPS: ~$5/month
+
+Gas Fees:
+- Per round end: ~$0.01-0.02
+- 60 rounds/hour: ~$0.60-1.20/hour
+- Daily: ~$14.40-28.80
+- Monthly: ~$432-864
+
+💡 TIP: Start with testnet to test everything for FREE!
+
+
+=================================================================
+🔍 MONITORING
+=================================================================
+
+Check logs in real-time:
+  npm run dev
+
+Or if deployed:
+  - Render: View logs in dashboard
+  - Railway: View logs in dashboard
+  - PM2: pm2 logs
+
+
+=================================================================
+⚠️  TROUBLESHOOTING
+=================================================================
+
+"Insufficient funds for gas"
+→ Add more ETH to the wallet
+
+"Round already ended"
+→ Normal - someone else ended it first
+
+"NONCE_EXPIRED"
+→ Multiple instances running - stop duplicates
+
+Server not ending rounds
+→ Check logs
+→ Verify wallet has ETH
+→ Test /health endpoint
+
+
+=================================================================
+🔒 SECURITY BEST PRACTICES
+=================================================================
+
+1. ✅ Use separate wallet (not owner wallet)
+2. ✅ Only give it ~$5 ETH at a time
+3. ✅ Never commit .env to git
+4. ✅ Use environment variables in production
+5. ✅ Rotate keys periodically
+
+
+=================================================================
+📊 HOW IT WORKS
+=================================================================
+
+Every minute, the backend:
+1. Checks current round status
+2. If round expired AND has tickets:
+   → Calls endRound()
+   → Picks winner
+   → Stores prize for claiming
+   → Starts new round
+3. If round expired with NO tickets:
+   → Skips (will start on next ticket purchase)
+
+Users see:
+- ✅ Round ends smoothly
+- ✅ No transaction popups
+- ✅ Winner sees "Claim" in History
+- ✅ New round starts automatically
+
+
+=================================================================
+🎯 NEXT STEPS
+=================================================================
+
+1. Test locally with npm run dev
+2. Verify round ending works
+3. Deploy to Render/Railway
+4. Monitor for 24 hours
+5. Check gas usage
+6. Top up wallet as needed
+
+
+=================================================================
+Need help? Check the logs or test the /health endpoint!
+=================================================================

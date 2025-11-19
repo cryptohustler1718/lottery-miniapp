@@ -1,0 +1,33 @@
+{
+  "accountAssociation": {
+    "header": "",
+    "payload": "",
+    "signature": ""
+  },
+  "baseBuilder": {
+    "ownerAddress": "0x"
+  },
+  "miniapp": {
+    "version": "1",
+    "name": "Lottery Mini App",
+    "homeUrl": "https://your-app.com",
+    "iconUrl": "https://your-app.com/icon.png",
+    "splashImageUrl": "https://your-app.com/splash.png",
+    "splashBackgroundColor": "#1a1a2e",
+    "webhookUrl": "https://your-app.com/api/webhook",
+    "subtitle": "Hourly lottery, instant wins",
+    "description": "Join the hourly lottery! Buy tickets for $0.1 each, match 2 numbers, and win 90% of the prize pool. New round every hour!",
+    "screenshotUrls": [
+      "https://your-app.com/screenshot1.png",
+      "https://your-app.com/screenshot2.png"
+    ],
+    "primaryCategory": "games",
+    "tags": ["lottery", "gaming", "crypto", "base"],
+    "heroImageUrl": "https://your-app.com/hero.png",
+    "tagline": "Win big every hour",
+    "ogTitle": "Lottery Mini App - Hourly Lottery on Base",
+    "ogDescription": "Join the hourly lottery! Buy tickets for $0.1 each and win 90% of the prize pool.",
+    "ogImageUrl": "https://your-app.com/og-image.png",
+    "noindex": false
+  }
+}

@@ -1,0 +1,121 @@
+# Quick Start Guide - Testing the Lottery App
+
+## Option 1: Test with Base Sepolia (Recommended for Testing)
+
+### Step 1: Get Test Funds
+1. **Get Base Sepolia ETH** (for gas fees):
+   - Go to: https://www.coinbase.com/faucets/base-ethereum-goerli-faucet
+   - Or: https://www.alchemy.com/faucets/base-sepolia
+   - Connect your wallet and claim testnet ETH
+
+2. **Get Test USDC**:
+   - Go to: https://faucet.circle.com/
+   - Select "USDC" and "Base Sepolia"
+   - Enter your wallet address
+   - Claim testnet USDC (usually get 10-100 USDC)
+
+### Step 2: Configure for Testnet
+Edit `src/contracts/config.js`:
+```javascript
+export const BASE_CHAIN_ID = 84532; // Base Sepolia
+export const BASE_RPC_URL = 'https://sepolia.base.org';
+export const USDC_ADDRESS = '0x036CbD53842c5426634e7929541eC2318f3dCF7e';
+```
+
+### Step 3: Deploy Test Contract
+Use Remix IDE (https://remix.ethereum.org/):
+1. Copy contract from `contracts/LotteryContract.sol`
+2. Compile with Solidity 0.8.20+
+3. Deploy to Base Sepolia with USDC address: `0x036CbD53842c5426634e7929541eC2318f3dCF7e`
+4. Copy deployed address and update `LOTTERY_CONTRACT_ADDRESS` in config.js
+
+### Step 4: Test the App
+1. Run `npm run dev`
+2. Connect your wallet
+3. Buy tickets with testnet USDC
+4. Watch your balance decrease!
+5. End round and see winner receive USDC
+
+---
+
+## Option 2: Deploy to Production (Base Mainnet)
+
+⚠️ **WARNING: This uses REAL USDC on mainnet!**
+
+### Step 1: Get Real USDC
+- Buy USDC on Coinbase or any exchange
+- Bridge to Base network via https://bridge.base.org/
+
+### Step 2: Configure for Mainnet
+Keep the default settings in `src/contracts/config.js`:
+```javascript
+export const BASE_CHAIN_ID = 8453; // Base Mainnet
+export const USDC_ADDRESS = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913';
+```
+
+### Step 3: Deploy Production Contract
+1. Use Remix or Foundry
+2. Deploy to Base Mainnet with USDC: `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`
+3. Update contract address in config
+4. **IMPORTANT**: Verify contract on BaseScan for transparency
+
+### Step 4: Deploy Frontend
+1. Build: `npm run build`
+2. Deploy `dist/` folder to Vercel/Netlify
+3. Set up custom domain
+4. Update farcaster.json with your domain
+5. Generate account association credentials
+6. Publish to Farcaster!
+
+---
+
+## Understanding the User Flow
+
+1. **User connects wallet**:
+   - MetaMask (or any Web3 wallet) opens
+   - App requests to switch to Base network
+   - User approves
+
+2. **User buys ticket**:
+   - Clicks "Buy 1 Ticket"
+   - First time: Approve USDC spending (one-time)
+   - Transaction prompt: Send 0.1 USDC
+   - User confirms in wallet
+   - **0.1 USDC is deducted from wallet**
+   - Ticket appears in "Your Tickets"
+
+3. **Prize pool grows**:
+   - Every ticket purchase adds $0.10 to pool
+   - Live updates on screen
+   - All USDC held in smart contract
+
+4. **Round ends** (after 1 hour):
+   - Anyone clicks "End Round"
+   - Smart contract:
+     - Picks winning numbers from tickets
+     - Finds all matching tickets
+     - Selects one winner
+     - **Sends 90% USDC to winner**
+     - **Sends 10% USDC to you (owner)**
+   - New round starts automatically
+
+## Troubleshooting
+
+**"Insufficient USDC balance"**
+- Make sure you have at least $0.10 USDC on Base network
+- Check you're on the correct network (Base vs Base Sepolia)
+
+**"Transaction failed"**
+- Ensure you have ETH for gas fees
+- Check you approved USDC spending
+- Verify contract address is correct
+
+**"Please connect wallet"**
+- Install MetaMask extension
+- Make sure MetaMask is unlocked
+- Click "Connect Wallet" button
+
+**"Wrong network"**
+- The app auto-switches to Base
+- If it fails, manually switch in MetaMask
+- Network: Base (8453) or Base Sepolia (84532)

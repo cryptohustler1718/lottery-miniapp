@@ -1,0 +1,141 @@
+# Lottery Mini App - Deployment Instructions
+
+## IMPORTANT: Smart Contract Deployment Required
+
+This app now uses REAL USDC payments on Base Network through a smart contract.
+You MUST deploy the smart contract before the app will work.
+
+## Step 1: Deploy the Smart Contract
+
+### Prerequisites
+- Install Foundry or Hardhat for contract deployment
+- Get Base Sepolia testnet ETH for testing (from https://www.coinbase.com/faucets/base-ethereum-goerli-faucet)
+- For mainnet: Get real ETH on Base mainnet
+
+### Deploy using Remix (Easiest)
+1. Go to https://remix.ethereum.org/
+2. Create a new file and paste the contract from `contracts/LotteryContract.sol`
+3. Compile the contract (Solidity 0.8.20+)
+4. Deploy:
+   - Network: Base Mainnet (Chain ID: 8453) or Base Sepolia for testing
+   - Constructor parameter `_usdcToken`: 
+     - Base Mainnet: `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`
+     - Base Sepolia: `0x036CbD53842c5426634e7929541eC2318f3dCF7e`
+5. Copy the deployed contract address
+
+### Deploy using Foundry (Advanced)
+```bash
+# Install Foundry
+curl -L https://foundry.paradigm.xyz | bash
+foundryup
+
+# Deploy to Base Sepolia (testnet)
+forge create --rpc-url https://sepolia.base.org \
+  --private-key YOUR_PRIVATE_KEY \
+  contracts/LotteryContract.sol:HourlyLottery \
+  --constructor-args 0x036CbD53842c5426634e7929541eC2318f3dCF7e
+
+# Deploy to Base Mainnet (production)
+forge create --rpc-url https://mainnet.base.org \
+  --private-key YOUR_PRIVATE_KEY \
+  contracts/LotteryContract.sol:HourlyLottery \
+  --constructor-args 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913
+```
+
+## Step 2: Update Contract Address in Config
+
+Edit `src/contracts/config.js`:
+```javascript
+export const LOTTERY_CONTRACT_ADDRESS = 'YOUR_DEPLOYED_CONTRACT_ADDRESS';
+```
+
+For testing, you may also want to update to Base Sepolia:
+```javascript
+export const BASE_CHAIN_ID = 84532; // Base Sepolia
+export const BASE_RPC_URL = 'https://sepolia.base.org';
+export const USDC_ADDRESS = '0x036CbD53842c5426634e7929541eC2318f3dCF7e';
+```
+
+## Step 3: Farcaster Mini App Configuration
+
+### 1. Update farcaster.json
+Edit `public/.well-known/farcaster.json` and:
+- Replace `"ownerAddress": "0x"` with your Base wallet address
+- Update all URLs (homeUrl, iconUrl, etc.) with your deployed app URL
+- Generate accountAssociation credentials using Base Build tool (https://www.base.dev/)
+
+### 2. Update index.html
+Edit `index.html` and update the fc:miniapp metadata:
+- Replace `"imageUrl"` with your actual embed image URL
+- Replace `"url"` with your deployed app URL
+
+### 3. Deploy
+1. Build the app: `npm run build`
+2. Deploy the `dist` folder to your hosting service (Vercel, Netlify, etc.)
+3. Ensure `.well-known/farcaster.json` is accessible at your domain
+
+### 4. Generate Account Association
+1. Deploy your app with the manifest file
+2. Go to https://www.base.dev/ and find the Account association tool
+3. Enter your domain and click "Verify"
+4. Copy the generated accountAssociation fields
+5. Update `public/.well-known/farcaster.json` with these credentials
+
+### 5. Preview & Publish
+1. Use Base Build Preview tool: https://www.base.dev/preview
+2. Verify your app loads correctly
+3. Post to Base app with your URL to publish
+
+## Features Implemented
+✅ Farcaster Mini App integration with SDK
+✅ Fixed dimensions (424x695px for web)
+✅ Lexend font throughout
+✅ farcaster.json manifest
+✅ Embed metadata in index.html
+✅ 1-hour lottery rounds
+✅ **REAL USDC payments on Base network**
+✅ **Smart contract integration**
+✅ **Automatic USDC approval flow**
+✅ **Live transaction status updates**
+✅ $0.1 USDC per ticket
+✅ 2 random numbers per ticket (1-50)
+✅ Live prize pool updates from blockchain
+✅ Ticket counter from smart contract
+✅ 90/10 prize split (enforced by contract)
+✅ Guaranteed winner each round
+✅ Automatic prize distribution via smart contract
+✅ USDC balance display
+✅ Base network switching
+
+## How It Works
+
+1. **User connects wallet** - App switches to Base network automatically
+2. **User buys tickets** - Each purchase:
+   - Checks USDC balance
+   - Requests USDC approval if needed
+   - Sends transaction to smart contract
+   - Deducts $0.1 USDC from user's wallet
+   - USDC goes to smart contract
+3. **Round ends** - Anyone can trigger `endRound()`:
+   - Smart contract picks winning numbers from existing tickets
+   - Ensures at least one winner
+   - Automatically sends 90% to winner
+   - Automatically sends 10% to contract owner (you)
+   - Starts new round
+4. **Winner receives USDC** - Instant, automatic transfer
+
+## Testing with Testnet USDC
+
+1. Switch to Base Sepolia in `src/contracts/config.js`
+2. Get testnet ETH from Base faucet
+3. Get testnet USDC from Circle faucet: https://faucet.circle.com/
+4. Test the full flow without spending real money
+
+## Security Notes
+
+- Smart contract uses block.prevrandao for randomness (sufficient for this use case)
+- 10% fee automatically goes to contract owner wallet
+- USDC never leaves the contract except for winner payout and owner fee
+- No reentrancy vulnerabilities - using transfer pattern
+- Round can only be ended once
+- Guaranteed winner mechanism ensures fairness

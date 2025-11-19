@@ -1,0 +1,452 @@
+═══════════════════════════════════════════════════════════════════
+🚀 COMPLETE DEPLOYMENT GUIDE - FARCASTER MINI APP + BACKEND
+═══════════════════════════════════════════════════════════════════
+
+This guide covers deploying your lottery app to:
+1. Vercel/Netlify (Frontend)
+2. Render.com (Backend)
+3. Farcaster (Mini App)
+4. Base Sepolia → Base Mainnet migration
+
+═══════════════════════════════════════════════════════════════════
+📋 PREREQUISITES CHECKLIST
+═══════════════════════════════════════════════════════════════════
+
+✅ Contract deployed on Base Sepolia
+✅ Contract address updated in config.js
+✅ Frontend working locally (npm run dev)
+✅ Backend working locally (cd backend && npm run dev)
+✅ GitHub account (for deployments)
+✅ Farcaster account (for mini app)
+
+═══════════════════════════════════════════════════════════════════
+PHASE 1: DEPLOY FRONTEND (FARCASTER MINI APP)
+═══════════════════════════════════════════════════════════════════
+
+STEP 1: Push to GitHub
+────────────────────────────────────────────────────────────────────
+1. Create new repo on GitHub (e.g., "lottery-miniapp")
+
+2. Add .gitignore if not exists:
+   
+   node_modules/
+   dist/
+   .env
+   .env.local
+   backend/.env
+   backend/node_modules/
+   *.log
+
+3. Initialize git and push:
+   
+   git init
+   git add .
+   git commit -m "Initial commit"
+   git remote add origin https://github.com/YOUR_USERNAME/lottery-miniapp.git
+   git branch -M main
+   git push -u origin main
+
+
+STEP 2: Deploy to Vercel (RECOMMENDED)
+────────────────────────────────────────────────────────────────────
+Why Vercel? Free, fast, perfect for Vite apps
+
+1. Go to vercel.com
+2. Sign in with GitHub
+3. Click "New Project"
+4. Import your repo
+5. Configure:
+   
+   Framework Preset: Vite
+   Root Directory: ./  (leave as is)
+   Build Command: npm run build
+   Output Directory: dist
+   Install Command: npm install
+
+6. Add Environment Variables:
+   
+   VITE_LOTTERY_CONTRACT=0x520066b9340dCEc3A876Cec21973390c9d67ac8f
+   VITE_USDC_ADDRESS=0x036CbD53842c5426634e7929541eC2318f3dCF7e
+   VITE_CHAIN_ID=84532
+   VITE_RPC_URL=https://sepolia.base.org
+
+7. Click "Deploy"
+
+8. Wait 2-3 minutes
+
+9. You'll get URL like: https://lottery-miniapp.vercel.app
+
+✅ Test: Open URL and verify app works!
+
+
+ALTERNATIVE: Deploy to Netlify
+────────────────────────────────────────────────────────────────────
+1. Go to netlify.com
+2. New site from Git
+3. Connect GitHub repo
+4. Settings:
+   
+   Build command: npm run build
+   Publish directory: dist
+
+5. Add environment variables (same as Vercel)
+6. Deploy!
+
+
+STEP 3: Update Farcaster Manifest
+────────────────────────────────────────────────────────────────────
+Edit: public/.well-known/farcaster.json
+
+Replace ALL "https://your-app.com" with your Vercel URL:
+
+{
+  "accountAssociation": {
+    "header": "",
+    "payload": "",
+    "signature": ""
+  },
+  "baseBuilder": {
+    "ownerAddress": "YOUR_WALLET_ADDRESS"
+  },
+  "miniapp": {
+    "version": "1",
+    "name": "Lottery Mini App",
+    "homeUrl": "https://lottery-miniapp.vercel.app",
+    "iconUrl": "https://lottery-miniapp.vercel.app/icon.png",
+    "splashImageUrl": "https://lottery-miniapp.vercel.app/splash.png",
+    "splashBackgroundColor": "#1a1a2e",
+    "webhookUrl": "https://lottery-miniapp.vercel.app/api/webhook",
+    "subtitle": "2-minute lottery, instant wins",
+    "description": "Join the lottery! Buy tickets for $0.1 each, match 2 numbers, and win 90% of the prize pool. New round every 2 minutes!",
+    "screenshotUrls": [
+      "https://lottery-miniapp.vercel.app/screenshot1.png"
+    ],
+    "primaryCategory": "games",
+    "tags": ["lottery", "gaming", "crypto", "base"],
+    "heroImageUrl": "https://lottery-miniapp.vercel.app/hero.png",
+    "tagline": "Win big every 2 minutes",
+    "ogTitle": "Lottery Mini App - Fast Lottery on Base",
+    "ogDescription": "Join the lottery! Buy tickets for $0.1 each and win 90% of the prize pool.",
+    "ogImageUrl": "https://lottery-miniapp.vercel.app/og-image.png",
+    "noindex": false
+  }
+}
+
+Then:
+git add .
+git commit -m "Update manifest URLs"
+git push
+
+Vercel will auto-deploy!
+
+
+STEP 4: Create Images (Optional but Recommended)
+────────────────────────────────────────────────────────────────────
+Create and upload to public/:
+
+- icon.png (512x512) - App icon
+- splash.png (424x695) - Loading screen
+- hero.png (1200x630) - Banner image
+- og-image.png (1200x630) - Share preview
+- screenshot1.png (424x695) - App screenshot
+
+Tools: Canva, Figma, or simple graphic editor
+
+
+STEP 5: Register on Farcaster
+────────────────────────────────────────────────────────────────────
+1. Go to: https://warpcast.com/~/developers/miniapps
+
+2. Click "Create Mini App"
+
+3. Fill in:
+   - Name: Lottery Mini App
+   - URL: https://lottery-miniapp.vercel.app
+   - Manifest: https://lottery-miniapp.vercel.app/.well-known/farcaster.json
+
+4. Submit for review
+
+5. Wait for approval (24-48 hours)
+
+✅ Once approved, your app appears in Farcaster!
+
+
+═══════════════════════════════════════════════════════════════════
+PHASE 2: DEPLOY BACKEND (AUTO-ROUND SERVICE)
+═══════════════════════════════════════════════════════════════════
+
+STEP 1: Prepare Backend for Deployment
+────────────────────────────────────────────────────────────────────
+1. Make sure backend/ is in your GitHub repo
+
+2. Create wallet for backend:
+   - Open MetaMask
+   - Create new account: "Lottery Backend"
+   - Export private key (SAVE IT SECURELY!)
+   - Send 0.05 ETH (Base Sepolia) to this wallet
+     Get testnet ETH: https://www.coinbase.com/faucets/base-ethereum-goerli-faucet
+
+
+STEP 2: Deploy to Render.com (FREE)
+────────────────────────────────────────────────────────────────────
+Why Render? Free tier, easy setup, always online
+
+1. Go to render.com
+2. Sign up with GitHub
+3. Click "New +" → "Web Service"
+4. Connect your GitHub repo
+5. Configure:
+   
+   Name: lottery-backend
+   Root Directory: backend
+   Runtime: Node
+   Build Command: npm install
+   Start Command: npm start
+   Instance Type: Free
+
+6. Add Environment Variables:
+   Click "Advanced" → "Add Environment Variable"
+   
+   RPC_URL=https://sepolia.base.org
+   LOTTERY_CONTRACT_ADDRESS=0x520066b9340dCEc3A876Cec21973390c9d67ac8f
+   PRIVATE_KEY=your_backend_wallet_private_key_here
+   PORT=3001
+
+   ⚠️  CRITICAL: Never commit PRIVATE_KEY to git!
+
+7. Click "Create Web Service"
+
+8. Wait 5-10 minutes for deployment
+
+9. You'll get URL like: https://lottery-backend.onrender.com
+
+10. Test health check:
+    Open: https://lottery-backend.onrender.com/health
+    
+    Should see:
+    {
+      "status": "ok",
+      "wallet": "0x...",
+      "balance": "0.05",
+      "currentRound": 1
+    }
+
+✅ Backend is now running 24/7 and auto-ending rounds!
+
+
+ALTERNATIVE: Deploy to Railway
+────────────────────────────────────────────────────────────────────
+1. Go to railway.app
+2. New Project → Deploy from GitHub
+3. Select backend folder
+4. Add environment variables
+5. Deploy!
+
+Cost: $5/month free credit
+
+
+STEP 3: Monitor Backend
+────────────────────────────────────────────────────────────────────
+Check logs:
+1. Go to Render dashboard
+2. Click your service
+3. Click "Logs" tab
+
+You should see every minute:
+🔔 Cron job triggered at...
+🔍 Checking if round needs to end...
+⏳ Round #X still active - Y minutes remaining
+
+
+═══════════════════════════════════════════════════════════════════
+PHASE 3: TEST EVERYTHING ON BASE SEPOLIA
+═══════════════════════════════════════════════════════════════════
+
+STEP 1: Complete Flow Test
+────────────────────────────────────────────────────────────────────
+1. Open your Vercel URL in browser
+2. Connect wallet (MetaMask)
+3. Get testnet USDC: https://faucet.circle.com/
+4. Buy 1 ticket
+5. Wait for round to end (2 minutes)
+6. Watch backend logs - should auto-end round
+7. Check History tab - see past round
+8. If you won, click "Claim Winnings"
+
+✅ Everything working? Great! Continue to Phase 4
+
+
+STEP 2: Test on Farcaster (Once Approved)
+────────────────────────────────────────────────────────────────────
+1. Open Warpcast app
+2. Go to Explore → Mini Apps
+3. Find your app
+4. Open it
+5. Test full flow again
+
+✅ Smooth experience? Ready for mainnet!
+
+
+═══════════════════════════════════════════════════════════════════
+PHASE 4: MIGRATE TO BASE MAINNET (PRODUCTION)
+═══════════════════════════════════════════════════════════════════
+
+⚠️  DO THIS ONLY AFTER THOROUGH TESTING ON SEPOLIA!
+
+STEP 1: Deploy Contract to Base Mainnet
+────────────────────────────────────────────────────────────────────
+1. Get real ETH on Base:
+   - Buy ETH on Coinbase
+   - Bridge to Base: https://bridge.base.org/
+
+2. Update Hardhat config for mainnet
+
+3. Deploy contract:
+   
+   npx hardhat run scripts/deploy.js --network base
+
+4. SAVE the contract address!
+
+5. Verify on BaseScan:
+   
+   npx hardhat verify --network base <CONTRACT_ADDRESS> <USDC_ADDRESS>
+
+
+STEP 2: Update Frontend Config
+────────────────────────────────────────────────────────────────────
+Edit .env.production:
+
+VITE_CHAIN_ID=8453
+VITE_RPC_URL=https://mainnet.base.org
+VITE_LOTTERY_CONTRACT=<NEW_MAINNET_CONTRACT>
+VITE_USDC_ADDRESS=0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913
+
+Update src/contracts/config.js:
+- Change BASE_CHAIN_ID to 8453
+- Change RPC_URL to https://mainnet.base.org
+- Change LOTTERY_CONTRACT_ADDRESS to new address
+- Change USDC_ADDRESS to mainnet USDC
+
+
+STEP 3: Update Backend Config
+────────────────────────────────────────────────────────────────────
+In Render.com dashboard:
+1. Go to your service
+2. Environment → Edit
+3. Update:
+   
+   RPC_URL=https://mainnet.base.org
+   LOTTERY_CONTRACT_ADDRESS=<NEW_MAINNET_CONTRACT>
+
+4. Add MORE ETH to backend wallet (~0.5 ETH = $1000 for 1 month)
+
+5. Redeploy backend
+
+
+STEP 4: Redeploy Frontend
+────────────────────────────────────────────────────────────────────
+git add .
+git commit -m "Switch to Base mainnet"
+git push
+
+Vercel auto-deploys → Live in 2 minutes!
+
+
+STEP 5: Update Farcaster Manifest
+────────────────────────────────────────────────────────────────────
+Update description to remove "testnet" mentions
+Push changes
+Wait for auto-deploy
+
+
+═══════════════════════════════════════════════════════════════════
+📊 COSTS BREAKDOWN (MAINNET)
+═══════════════════════════════════════════════════════════════════
+
+Frontend (Vercel): FREE
+Backend (Render): FREE
+
+Gas Costs:
+- Per round end: ~$0.01-0.02
+- 720 rounds/day (every 2 min): ~$7.20-14.40/day
+- Monthly: ~$216-432
+
+Optimization tips:
+- Increase round duration (5 min → $86/month)
+- Use Chainlink Automation (variable cost)
+- Only run backend during peak hours
+
+
+═══════════════════════════════════════════════════════════════════
+🔒 SECURITY CHECKLIST
+═══════════════════════════════════════════════════════════════════
+
+✅ Backend wallet is SEPARATE from owner wallet
+✅ Backend wallet only has minimal ETH (~0.5 ETH)
+✅ Private keys NEVER in git
+✅ Contract verified on BaseScan
+✅ Environment variables set in deployment platforms
+✅ .env files in .gitignore
+✅ Regular monitoring of backend wallet balance
+
+
+═══════════════════════════════════════════════════════════════════
+📱 QUICK REFERENCE
+═══════════════════════════════════════════════════════════════════
+
+Frontend URL: https://lottery-miniapp.vercel.app
+Backend URL: https://lottery-backend.onrender.com
+Health Check: https://lottery-backend.onrender.com/health
+Contract (Sepolia): 0x520066b9340dCEc3A876Cec21973390c9d67ac8f
+Contract (Mainnet): <UPDATE_AFTER_DEPLOY>
+
+Farcaster: https://warpcast.com/~/developers/miniapps
+Base Bridge: https://bridge.base.org/
+BaseScan: https://basescan.org/
+
+
+═══════════════════════════════════════════════════════════════════
+🆘 TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════
+
+"Backend not ending rounds"
+→ Check backend logs in Render
+→ Verify wallet has ETH
+→ Test /health endpoint
+
+"Transaction failed"
+→ Check wallet has USDC
+→ Check correct network (Sepolia vs Mainnet)
+→ Verify contract address in config
+
+"App not showing in Farcaster"
+→ Wait for approval (24-48h)
+→ Verify manifest URL is accessible
+→ Check manifest JSON is valid
+
+"Claim button not working"
+→ Verify contract has claimWinnings function
+→ Check ABI in config.js includes claimWinnings
+→ Refresh browser to get latest code
+
+
+═══════════════════════════════════════════════════════════════════
+🎉 SUCCESS METRICS
+═══════════════════════════════════════════════════════════════════
+
+Your app is production-ready when:
+
+✅ Users can buy tickets smoothly
+✅ Rounds end automatically every 2 minutes
+✅ Winners can claim prizes anytime
+✅ No transaction popups (backend handles it)
+✅ App works in Farcaster
+✅ Backend runs 24/7 without issues
+✅ Gas costs are predictable
+
+You've built a fully automatic, decentralized lottery! 🚀
+
+
+═══════════════════════════════════════════════════════════════════
+Need help? Check logs first, then troubleshoot section!
+═══════════════════════════════════════════════════════════════════
