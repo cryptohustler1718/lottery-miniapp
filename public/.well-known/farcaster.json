@@ -9,12 +9,10 @@
     "name": "Lottery Mini App",
     "homeUrl": "https://lottery-miniapp.vercel.app",
     "iconUrl": "https://lottery-miniapp.vercel.app/icon.png",
-    "imageUrl": "https://lottery-miniapp.vercel.app/og-image.png",
-    "splashImageUrl": "https://lottery-miniapp.vercel.app/splash.png",
+    "splashImageUrl": "https://lottery-miniapp.vercel.app/icon.png",
     "splashBackgroundColor": "#1a1a2e",
-    "webhookUrl": "https://lottery-miniapp.vercel.app/api/webhook",
-    "subtitle": "2-minute lottery, instant wins",
-    "description": "Join the lottery! Buy tickets for $0.1 each, match 2 numbers, and win 90% of the prize pool. New round every 2 minutes!",
+    "subtitle": "Fast lottery wins",
+    "description": "Buy tickets for $0.1 each, match 2 numbers, and win 90% of the prize pool. New round every 2 minutes!",
     "primaryCategory": "games"
   }
 }
