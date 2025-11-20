@@ -45,8 +45,10 @@ function App() {
       try {
         await sdk.actions.ready();
         setIsSDKLoaded(true);
+        console.log("Farcaster SDK loaded successfully");
       } catch (error) {
         console.error("Failed to initialize SDK:", error);
+        setIsSDKLoaded(true); // Set true anyway for desktop fallback
       }
     };
     initSDK();
@@ -78,15 +80,26 @@ function App() {
   // Connect wallet and initialize contracts
   const connectWallet = async () => {
     try {
-      if (!window.ethereum) {
-        alert("Please install MetaMask or use a Web3-enabled browser");
+      // Try to get Farcaster/Base embedded wallet first
+      let ethProvider;
+      
+      if (isSDKLoaded && sdk?.wallet) {
+        // Use Farcaster SDK embedded wallet
+        console.log("Using Farcaster SDK wallet");
+        ethProvider = await sdk.wallet.getEthereumProvider();
+      } else if (window.ethereum) {
+        // Fallback to browser extension wallet (for desktop)
+        console.log("Using browser extension wallet");
+        ethProvider = window.ethereum;
+      } else {
+        alert("No wallet found. Please open in Farcaster or Base app.");
         return;
       }
 
-      const web3Provider = new ethers.BrowserProvider(window.ethereum);
+      const web3Provider = new ethers.BrowserProvider(ethProvider);
       const accounts = await web3Provider.send("eth_requestAccounts", []);
 
-      await switchToBase(web3Provider);
+      await switchToBase(ethProvider);
 
       const web3Signer = await web3Provider.getSigner();
       const address = accounts[0];
