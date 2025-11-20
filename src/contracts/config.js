@@ -1,15 +1,15 @@
 // Base Network Configuration
-export const BASE_CHAIN_ID = 84532; // Base Mainnet
-export const BASE_RPC_URL = "https://sepolia.base.org";
+export const BASE_CHAIN_ID = 8453; // Base Mainnet
+export const BASE_RPC_URL = "https://mainnet.base.org";
 
 // USDC Contract on Base Mainnet
-export const USDC_ADDRESS = "0x036CbD53842c5426634e7929541eC2318f3dCF7e";
+export const USDC_ADDRESS = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
 
 // Lottery Contract Address (Update this after deployment)
 // IMPORTANT: Deploy the contract first using Remix or Foundry
-// See DEPLOYMENT.txt and QUICKSTART.txt for instructions
+// Deploy to Base Mainnet and update this address
 export const LOTTERY_CONTRACT_ADDRESS =
-  "0x520066b9340dCEc3A876Cec21973390c9d67ac8f"; // REPLACE WITH DEPLOYED ADDRESS
+  "0x0000000000000000000000000000000000000000"; // REPLACE WITH MAINNET DEPLOYED ADDRESS
 
 // Check if contract is deployed
 export const isContractDeployed = () => {
