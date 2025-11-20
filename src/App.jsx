@@ -108,10 +108,30 @@ function App() {
         params: [],
       });
 
-      await switchToBase(ethProvider);
+      // Try to switch to Base, but don't fail if it doesn't work
+      try {
+        await switchToBase(ethProvider);
+      } catch (switchError) {
+        console.log(
+          "Chain switch not supported or failed, continuing anyway:",
+          switchError.message
+        );
+        // Continue - the wallet might already be on Base or will handle it internally
+      }
 
       const web3Signer = await web3Provider.getSigner();
       const address = accounts[0];
+
+      // Check if we're on the right network
+      const network = await web3Provider.getNetwork();
+      console.log("Connected to chain ID:", network.chainId);
+
+      if (Number(network.chainId) !== BASE_CHAIN_ID) {
+        alert(
+          `Please switch to Base network in your wallet. Current chain: ${network.chainId}`
+        );
+        return;
+      }
 
       setProvider(web3Provider);
       setSigner(web3Signer);
