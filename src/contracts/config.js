@@ -9,7 +9,7 @@ export const USDC_ADDRESS = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
 // IMPORTANT: Deploy the contract first using Remix or Foundry
 // Deploy to Base Mainnet and update this address
 export const LOTTERY_CONTRACT_ADDRESS =
-  "0x0000000000000000000000000000000000000000"; // REPLACE WITH MAINNET DEPLOYED ADDRESS
+  "0x12fb80530E92d5804feD44A0C2daA11497CC6143"; // REPLACE WITH MAINNET DEPLOYED ADDRESS
 
 // Check if contract is deployed
 export const isContractDeployed = () => {
