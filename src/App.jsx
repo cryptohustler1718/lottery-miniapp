@@ -57,20 +57,24 @@ function App() {
   // Switch to Base network
   const switchToBase = async (ethProvider) => {
     try {
-      await ethProvider.send("wallet_switchEthereumChain", [
-        { chainId: `0x${BASE_CHAIN_ID.toString(16)}` },
-      ]);
+      await ethProvider.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: `0x${BASE_CHAIN_ID.toString(16)}` }],
+      });
     } catch (error) {
       if (error.code === 4902) {
-        await ethProvider.send("wallet_addEthereumChain", [
-          {
-            chainId: `0x${BASE_CHAIN_ID.toString(16)}`,
-            chainName: "Base",
-            nativeCurrency: { name: "Ethereum", symbol: "ETH", decimals: 18 },
-            rpcUrls: ["https://mainnet.base.org"],
-            blockExplorerUrls: ["https://basescan.org"],
-          },
-        ]);
+        await ethProvider.request({
+          method: "wallet_addEthereumChain",
+          params: [
+            {
+              chainId: `0x${BASE_CHAIN_ID.toString(16)}`,
+              chainName: "Base",
+              nativeCurrency: { name: "Ethereum", symbol: "ETH", decimals: 18 },
+              rpcUrls: ["https://mainnet.base.org"],
+              blockExplorerUrls: ["https://basescan.org"],
+            },
+          ],
+        });
       } else {
         throw error;
       }
@@ -82,7 +86,7 @@ function App() {
     try {
       // Try to get Farcaster/Base embedded wallet first
       let ethProvider;
-      
+
       if (isSDKLoaded && sdk?.wallet) {
         // Use Farcaster SDK embedded wallet
         console.log("Using Farcaster SDK wallet");
@@ -97,7 +101,12 @@ function App() {
       }
 
       const web3Provider = new ethers.BrowserProvider(ethProvider);
-      const accounts = await web3Provider.send("eth_requestAccounts", []);
+
+      // Request accounts using EIP-1193 standard
+      const accounts = await ethProvider.request({
+        method: "eth_requestAccounts",
+        params: [],
+      });
 
       await switchToBase(ethProvider);
 
