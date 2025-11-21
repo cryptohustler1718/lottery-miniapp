@@ -1,14 +1,14 @@
 // Base Network Configuration
-export const BASE_CHAIN_ID = 84532; // Base Sepolia
-export const BASE_RPC_URL = "https://sepolia.base.org";
+export const BASE_CHAIN_ID = 8453; // Base Mainnet
+export const BASE_RPC_URL = "https://mainnet.base.org";
 
-// USDC Contract on Base Sepolia
-export const USDC_ADDRESS = "0x036CbD53842c5426634e7929541eC2318f3dCF7e";
+// USDC Contract on Base Mainnet
+export const USDC_ADDRESS = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
 
 // Lottery Contract Address (Update this after deployment)
-// Using Sepolia for testing
+// IMPORTANT: You MUST deploy contract to Base Mainnet first!
 export const LOTTERY_CONTRACT_ADDRESS =
-  "0x520066b9340dCEc3A876Cec21973390c9d67ac8f"; // Sepolia contract
+  "0x624C969fE6988e6Fb700B78da3DC05ec1A5d34Eb"; // Deploy contract and update this
 
 // Check if contract is deployed
 export const isContractDeployed = () => {
