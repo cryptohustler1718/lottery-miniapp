@@ -12,7 +12,7 @@ contract HourlyLottery {
     address public owner;
     
     uint256 public constant TICKET_PRICE = 100000; // 0.1 USDC (6 decimals)
-    uint256 public constant ROUND_DURATION = 2 minutes;
+    uint256 public constant ROUND_DURATION = 5 minutes;
     
     struct Ticket {
         address owner;
