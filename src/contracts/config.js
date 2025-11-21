@@ -8,7 +8,7 @@ export const USDC_ADDRESS = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
 // Lottery Contract Address (Update this after deployment)
 // IMPORTANT: You MUST deploy contract to Base Mainnet first!
 export const LOTTERY_CONTRACT_ADDRESS =
-  "0x624C969fE6988e6Fb700B78da3DC05ec1A5d34Eb"; // Deploy contract and update this
+  "0xFBda7F08Bf8532BA35174ab1edaAfc8254bfb4F3"; // Deploy contract and update this
 
 // Check if contract is deployed
 export const isContractDeployed = () => {
