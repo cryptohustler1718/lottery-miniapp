@@ -163,12 +163,24 @@ function App() {
       setUsdcContract(usdc);
 
       // Load USDC balance
-      const balance = await usdc.balanceOf(address);
-      setUsdcBalance(ethers.formatUnits(balance, 6));
-      console.log("USDC Balance:", ethers.formatUnits(balance, 6));
+      try {
+        const balance = await usdc.balanceOf(address);
+        setUsdcBalance(ethers.formatUnits(balance, 6));
+        console.log("USDC Balance:", ethers.formatUnits(balance, 6));
+      } catch (balanceError) {
+        console.error("Failed to load USDC balance:", balanceError);
+        setUsdcBalance("0");
+      }
 
       // Load round data
-      await loadRoundData(lottery, address);
+      try {
+        await loadRoundData(lottery, address);
+      } catch (roundError) {
+        console.error("Failed to load round data:", roundError);
+        alert(
+          "Failed to load lottery data. Contract might not be initialized yet."
+        );
+      }
     } catch (error) {
       console.error("Failed to connect wallet:", error);
       // Don't show error if user rejected - just log it
